@@ -12,6 +12,10 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {
+  signInWithGooglePopup,
+  createUserDocumentFromAuth,
+} from "../helpers/firebase";
 
 function Copyright(props) {
   return (
@@ -41,6 +45,12 @@ export default function Login() {
       email: data.get("email"),
       password: data.get("password"),
     });
+  };
+
+  const logGoogleUser = async () => {
+    const { user } = await signInWithGooglePopup();
+    const userDocRef = await createUserDocumentFromAuth(user);
+    // console.log(response);
   };
 
   return (
@@ -116,6 +126,16 @@ export default function Login() {
                 sx={{ mt: 3, mb: 2 }}
               >
                 Sign In
+              </Button>
+
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={logGoogleUser}
+              >
+                Sign In With Google
               </Button>
               <Grid container>
                 <Grid item xs>
