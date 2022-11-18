@@ -14,8 +14,8 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
 
-const pages = ["dashboard", "Newblog", "Login"];
-const settings = ["Profile", "NewBlog", "Dashboard", "Logout"];
+const pages = ["dashboard", "Newblog", "Login", "Register"];
+const settings = ["profile", "NewBlog", "Dashboard", "Logout", "Register"];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -141,7 +141,7 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Kerim GURBAZ" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
             <Menu

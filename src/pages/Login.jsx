@@ -16,6 +16,8 @@ import {
   signInWithGooglePopup,
   createUserDocumentFromAuth,
 } from "../helpers/firebase";
+// import { Link as Links } from "react-router-dom";
+// import Register from "./Register";
 
 function Copyright(props) {
   return (
