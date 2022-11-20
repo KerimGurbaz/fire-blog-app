@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useContext } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,11 +14,14 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
+import { UserContext } from "../contexts/AuthContext";
 
 const pages = ["dashboard", "Newblog", "Login", "Register"];
 const settings = ["profile", "NewBlog", "Dashboard", "Logout", "Register"];
 
 function ResponsiveAppBar() {
+  const { currentUser } = useContext(UserContext);
+  console.log(currentUser);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 

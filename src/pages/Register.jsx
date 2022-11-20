@@ -54,10 +54,7 @@ export default function Register() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (password !== confirmPassword) {
-      alert("passwords do not match");
-      return;
-    }
+
     try {
       const { user } = await createAuthUserWithEmailAndPassword(
         email,
