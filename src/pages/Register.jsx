@@ -18,12 +18,6 @@ import {
 } from "../helpers/firebase";
 import { useState } from "react";
 
-const defaultFormFields = {
-  displayName: "",
-  email: "",
-  password: "",
-};
-
 function Copyright(props) {
   return (
     <Typography
@@ -42,19 +36,28 @@ function Copyright(props) {
   );
 }
 
+const defaultFormFields = {
+  displayName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
 const theme = createTheme();
 
 export default function Register() {
   const [formFields, setFormFields] = useState(defaultFormFields);
-  const { displayName, email, password } = formFields;
+  const { displayName, email, password, confirmPassword } = formFields;
 
-  console.log("formFields", formFields);
   const resetFormFields = () => {
     setFormFields(defaultFormFields);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (password !== confirmPassword) {
+      alert("passwords do not match");
+      return;
+    }
     try {
       const { user } = await createAuthUserWithEmailAndPassword(
         email,
@@ -70,11 +73,6 @@ export default function Register() {
         console.log("user creation encountered an error", error);
       }
     }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
   };
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -159,6 +157,7 @@ export default function Register() {
                 onChange={handleChange}
                 autoComplete="current-password"
               />
+
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"

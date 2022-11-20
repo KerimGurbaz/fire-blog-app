@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState, useContext } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -15,9 +16,10 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {
   signInWithGooglePopup,
   createUserDocumentFromAuth,
+  signInAuthUserWithEmailAndPassword,
 } from "../helpers/firebase";
-// import { Link as Links } from "react-router-dom";
-// import Register from "./Register";
+
+import { UserContext } from "../contexts/AuthContext";
 
 function Copyright(props) {
   return (
@@ -39,20 +41,57 @@ function Copyright(props) {
 
 const theme = createTheme();
 
+const defaultFormFields = {
+  email: "",
+  password: "",
+};
+
 export default function Login() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  const [formFields, setFormFields] = useState(defaultFormFields);
+  const { email, password } = formFields;
+  const { setCurrentUser } = useContext(UserContext);
+
+  const resetFormFields = () => {
+    setFormFields(defaultFormFields);
   };
 
-  const logGoogleUser = async () => {
+  const signInWithGoogle = async () => {
     const { user } = await signInWithGooglePopup();
-    const userDocRef = await createUserDocumentFromAuth(user);
+    await createUserDocumentFromAuth(user);
     // console.log(response);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const { user } = await signInAuthUserWithEmailAndPassword(
+        email,
+        password
+      );
+      setCurrentUser(user);
+      resetFormFields();
+    } catch (error) {
+      switch (error.code) {
+        case "auth/wrong-password":
+          alert("incorrect password for email");
+          break;
+        case "auth/user-not-found":
+          alert("no user associated with this email");
+          break;
+        default:
+          console.log(error);
+      }
+      // if (error.code == "auth/wrong-password") {
+      //   alert("incorrect password for email");
+
+      // }
+    }
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormFields({ ...formFields, [name]: value });
   };
 
   return (
@@ -106,6 +145,7 @@ export default function Login() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                onChange={handleChange}
               />
               <TextField
                 margin="normal"
@@ -116,8 +156,10 @@ export default function Login() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={handleChange}
               />
               <FormControlLabel
+                onSubmit={handleSubmit}
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
@@ -135,7 +177,7 @@ export default function Login() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                onClick={logGoogleUser}
+                onClick={signInWithGoogle}
               >
                 Sign In With Google
               </Button>
