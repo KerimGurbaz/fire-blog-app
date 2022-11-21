@@ -15,12 +15,11 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
 import { UserContext } from "../contexts/AuthContext";
-
+let currentUser;
 const pages = ["dashboard", "Newblog", "Login", "Register"];
 const settings = ["profile", "NewBlog", "Dashboard", "Logout", "Register"];
 
 function ResponsiveAppBar() {
-  const { currentUser } = useContext(UserContext);
   console.log(currentUser);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
